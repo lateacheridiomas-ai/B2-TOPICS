@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditionals — B1 English</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .wrapper { width: 100%; max-width: 740px; }
+
+  .deck {
+    background: #12122a;
+    border-radius: 18px;
+    border: 1px solid #2a2a4a;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  .slide { display: none; padding: 2.5rem 3rem; min-height: 460px; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+
+  .slide-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 0.75rem;
+  }
+
+  .slide-title {
+    font-family: 'Lora', serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: #f0eee8;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  .slide-sub {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 1.75rem;
+    line-height: 1.75;
+  }
+
+  /* Cover */
+  .cover-accent { width: 50px; height: 3px; background: #e8a045; border-radius: 2px; margin-bottom: 1.5rem; }
+  .cover-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem; }
+  .cover-card {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .cover-card .cc-num { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; opacity: 0.7; }
+  .cover-card .cc-name { font-size: 14px; }
+  .cc1 { background: #1a2a3a; border-color: #2a4a6a; color: #7ab8f5; }
+  .cc2 { background: #1a2a1a; border-color: #2a4a2a; color: #7ac97a; }
+  .cc3 { background: #2a1a1a; border-color: #4a2a2a; color: #f57a7a; }
+  .ccm { background: #2a1a2a; border-color: #4a2a4a; color: #d07af5; }
+
+  /* Conditional cards - overview */
+  .cond-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cond-card {
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid;
+  }
+  .cond-card .cn { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .cond-card .ct { font-size: 12.5px; line-height: 1.6; }
+
+  .c1 { background: #0e1e2e; border-color: #1e3e5e; }
+  .c1 .cn { color: #7ab8f5; }
+  .c1 .ct { color: #7ab8f5cc; }
+
+  .c2 { background: #0e1e0e; border-color: #1e3e1e; }
+  .c2 .cn { color: #7ac97a; }
+  .c2 .ct { color: #7ac97acc; }
+
+  .c3 { background: #1e0e0e; border-color: #3e1e1e; }
+  .c3 .cn { color: #f57a7a; }
+  .c3 .ct { color: #f57a7acc; }
+
+  .cm { background: #1e0e1e; border-color: #3e1e3e; }
+  .cm .cn { color: #d07af5; }
+  .cm .ct { color: #d07af5cc; }
+
+  /* Formula */
+  .formula-box {
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1rem;
+    border: 1px solid;
+  }
+  .formula-box .fb-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .formula-box .fb-formula { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .formula-box .fb-meaning { font-size: 12px; opacity: 0.7; }
+
+  .fb1 { background: #0e1e2e; border-color: #1e3e5e; }
+  .fb1 .fb-label { color: #4a90d9; }
+  .fb1 .fb-formula { color: #7ab8f5; }
+  .fb1 .fb-meaning { color: #7ab8f5; }
+
+  .fb2 { background: #0e1e0e; border-color: #1e3e1e; }
+  .fb2 .fb-label { color: #4a994a; }
+  .fb2 .fb-formula { color: #7ac97a; }
+  .fb2 .fb-meaning { color: #7ac97a; }
+
+  .fb3 { background: #1e0e0e; border-color: #3e1e1e; }
+  .fb3 .fb-label { color: #994a4a; }
+  .fb3 .fb-formula { color: #f57a7a; }
+  .fb3 .fb-meaning { color: #f57a7a; }
+
+  .fbm { background: #1e0e1e; border-color: #3e1e3e; }
+  .fbm .fb-label { color: #994a99; }
+  .fbm .fb-formula { color: #d07af5; }
+  .fbm .fb-meaning { color: #d07af5; }
+
+  /* Example boxes */
+  .example-box {
+    border-radius: 10px;
+    padding: 0.9rem 1.2rem;
+    border-left: 3px solid;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+    line-height: 1.85;
+    background: #0d0d20;
+  }
+  .example-box.e1 { border-color: #378ADD; }
+  .example-box.e2 { border-color: #3a9a3a; }
+  .example-box.e3 { border-color: #cc4444; }
+  .example-box.em { border-color: #9944cc; }
+
+  .ex1 { color: #7ab8f5; font-weight: 500; }
+  .ex2 { color: #7ac97a; font-weight: 500; }
+  .ex3 { color: #f57a7a; font-weight: 500; }
+  .exm { color: #d07af5; font-weight: 500; }
+  .exn { color: #f0eee8; }
+
+  /* Tip */
+  .tip-box {
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid #2a2a1a;
+    font-size: 13px;
+    color: #e8a045;
+    background: #1e1a0e;
+    margin-top: 1rem;
+    line-height: 1.6;
+    border-color: #3a3010;
+  }
+
+  /* Reality scale */
+  .reality-track {
+    position: relative;
+    margin: 1.5rem 0;
+    padding: 0 10px;
+  }
+  .reality-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, #7ab8f5, #7ac97a, #f57a7a, #d07af5);
+    margin: 2.5rem 0 1rem;
+    position: relative;
+  }
+  .rt-marker {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .rt-dot { width: 12px; height: 12px; border-radius: 50%; margin-bottom: 6px; border: 2px solid #12122a; }
+  .rt-dot.d1 { background: #7ab8f5; }
+  .rt-dot.d2 { background: #7ac97a; }
+  .rt-dot.d3 { background: #f57a7a; }
+  .rt-dot.dm { background: #d07af5; }
+  .rt-label { font-size: 11px; white-space: nowrap; }
+  .rt-top { position: absolute; top: -32px; font-size: 11px; font-weight: 500; white-space: nowrap; transform: translateX(-50%); }
+
+  /* Real/Unreal labels */
+  .axis-labels { display: flex; justify-content: space-between; font-size: 11px; color: #555; margin-top: 0.5rem; }
+
+  /* Comparison table */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th {
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2a4a;
+    color: #666;
+  }
+  .comp-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #1e1e36;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table .t-type { font-weight: 500; font-size: 12px; }
+  .comp-table .t-blue { color: #7ab8f5; }
+  .comp-table .t-green { color: #7ac97a; }
+  .comp-table .t-red { color: #f57a7a; }
+  .comp-table .t-purple { color: #d07af5; }
+  .comp-table .t-gray { color: #888; font-size: 12px; }
+
+  /* Story */
+  .story-box {
+    background: #0d0d20;
+    border-radius: 12px;
+    padding: 1.4rem 1.6rem;
+    font-size: 14px;
+    line-height: 2.2;
+    border: 1px solid #2a2a4a;
+  }
+
+  /* Quiz */
+  .quiz-counter { font-size: 12px; color: #555; margin-bottom: 0.5rem; }
+  .quiz-sentence {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #f0eee8;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+  .quiz-q { font-size: 13px; color: #888; margin-bottom: 1rem; }
+  .quiz-opt {
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    padding: 0.75rem 1.1rem;
+    margin-bottom: 9px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: #ccc;
+    background: #0d0d20;
+    text-align: left;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .quiz-opt:hover:not(:disabled) { background: #1a1a35; border-color: #3a3a6a; }
+  .quiz-opt.correct { background: #0e1e0e; border-color: #3a9a3a; color: #7ac97a; }
+  .quiz-opt.wrong { background: #1e0e0e; border-color: #cc4444; color: #f57a7a; }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-fb {
+    font-size: 13px;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: none;
+    line-height: 1.6;
+  }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #0e1e0e; color: #7ac97a; border: 1px solid #2a4a2a; }
+  .quiz-fb.bad { background: #1e0e0e; color: #f57a7a; border: 1px solid #4a2a2a; }
+  .next-q-btn {
+    display: none;
+    margin-top: 12px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 1px solid #2a2a4a;
+    background: #0d0d20;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .next-q-btn:hover { background: #1a1a35; }
+  .next-q-btn.show { display: inline-block; }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    border-top: 1px solid #1e1e36;
+    background: #0d0d20;
+  }
+  .nav-btn {
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 1px solid #2a2a4a;
+    background: #12122a;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .nav-btn:hover:not(:disabled) { background: #1e1e3e; border-color: #3a3a6a; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .nav-btn:active:not(:disabled) { transform: scale(0.98); }
+
+  .dots-row { display: flex; gap: 6px; align-items: center; }
+  .dot-ind {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #2a2a4a;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot-ind:hover { background: #4a4a7a; }
+  .dot-ind.active { background: #e8a045; transform: scale(1.35); }
+
+  .slide-counter { font-size: 12px; color: #444; text-align: center; margin-top: 0.6rem; }
+
+  strong { font-weight: 500; color: #f0eee8; }
+
+  .legend-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 1rem; }
+  .legend-item { font-size: 12px; display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="deck">
+
+    <!-- Slide 0: Cover -->
+    <div class="slide active" id="s0">
+      <div class="slide-label">B1 Grammar · Conditionals</div>
+      <div class="cover-accent"></div>
+      <div class="slide-title">Conditional Sentences</div>
+      <div class="slide-sub">How we talk about real possibilities, imaginary situations, past regrets — and combinations of all three.</div>
+      <div class="cover-grid">
+        <div class="cover-card cc1">
+          <div class="cc-num">1st conditional</div>
+          <div class="cc-name">Real possibility</div>
+        </div>
+        <div class="cover-card cc2">
+          <div class="cc-num">2nd conditional</div>
+          <div class="cc-name">Imaginary present</div>
+        </div>
+        <div class="cover-card cc3">
+          <div class="cc-num">3rd conditional</div>
+          <div class="cc-name">Past regret / speculation</div>
+        </div>
+        <div class="cover-card ccm">
+          <div class="cc-num">Mixed conditional</div>
+          <div class="cc-name">Past cause → present result</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1: Overview -->
+    <div class="slide" id="s1">
+      <div class="slide-label">Overview</div>
+      <div class="slide-title">Four types, four meanings</div>
+      <div class="slide-sub">Each conditional expresses a different relationship between condition and result.</div>
+      <div class="cond-grid">
+        <div class="cond-card c1">
+          <div class="cn">1st Conditional</div>
+          <div class="ct">Real and possible situation in the present or future. The condition could actually happen.</div>
+        </div>
+        <div class="cond-card c2">
+          <div class="cn">2nd Conditional</div>
+          <div class="ct">Imaginary or unlikely situation now or in the future. The speaker doesn't expect it to happen.</div>
+        </div>
+        <div class="cond-card c3">
+          <div class="cn">3rd Conditional</div>
+          <div class="ct">Imaginary situation in the past. It's too late — it didn't happen. Used for regrets and speculation.</div>
+        </div>
+        <div class="cond-card cm">
+          <div class="cn">Mixed Conditional</div>
+          <div class="ct">A past condition with a present result — or a present condition with a past result.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Reality scale -->
+    <div class="slide" id="s2">
+      <div class="slide-label">Reality scale</div>
+      <div class="slide-title">From real to impossible</div>
+      <div class="slide-sub">Think of conditionals on a scale — from things that could really happen to things that can never happen now.</div>
+      <div class="reality-track">
+        <div class="reality-bar">
+          <div class="rt-marker" style="left:12%">
+            <span class="rt-top" style="color:#7ab8f5;">1st</span>
+            <div class="rt-dot d1"></div>
+            <span class="rt-label" style="color:#7ab8f5;">possible</span>
+          </div>
+          <div class="rt-marker" style="left:38%">
+            <span class="rt-top" style="color:#7ac97a;">2nd</span>
+            <div class="rt-dot d2"></div>
+            <span class="rt-label" style="color:#7ac97a;">unlikely</span>
+          </div>
+          <div class="rt-marker" style="left:66%">
+            <span class="rt-top" style="color:#f57a7a;">3rd</span>
+            <div class="rt-dot d3"></div>
+            <span class="rt-label" style="color:#f57a7a;">impossible</span>
+          </div>
+          <div class="rt-marker" style="left:90%">
+            <span class="rt-top" style="color:#d07af5;">Mixed</span>
+            <div class="rt-dot dm"></div>
+            <span class="rt-label" style="color:#d07af5;">mixed</span>
+          </div>
+        </div>
+      </div>
+      <div class="axis-labels">
+        <span>← Real / possible</span>
+        <span>Unreal / impossible →</span>
+      </div>
+      <div class="tip-box">The further right on the scale, the more "hypothetical" the situation — and the more complex the verb forms become.</div>
+    </div>
+
+    <!-- Slide 3: 1st Conditional -->
+    <div class="slide" id="s3">
+      <div class="slide-label">1st Conditional</div>
+      <div class="slide-title">First Conditional — real possibilities</div>
+      <div class="slide-sub">For real, likely situations in the present or future. The speaker believes this could actually happen.</div>
+      <div class="formula-box fb1">
+        <div class="fb-label">Formula</div>
+        <div class="fb-formula">If + present simple, … will + infinitive</div>
+        <div class="fb-meaning">If it rains, I will take an umbrella.</div>
+      </div>
+      <div class="example-box e1">
+        <span class="ex1">If you study hard,</span> <span class="exn">you <span class="ex1">will pass</span> the exam.</span>
+      </div>
+      <div class="example-box e1">
+        <span class="exn">She <span class="ex1">won't come</span> to the party</span> <span class="ex1">if she feels sick</span>.
+      </div>
+      <div class="tip-box">You can also use <strong>unless</strong> instead of <em>if not</em>: "Unless you hurry, you will miss the bus."</div>
+    </div>
+
+    <!-- Slide 4: 2nd Conditional -->
+    <div class="slide" id="s4">
+      <div class="slide-label">2nd Conditional</div>
+      <div class="slide-title">Second Conditional — imaginary present</div>
+      <div class="slide-sub">For imaginary, unlikely or impossible situations now or in the future. The speaker doesn't expect this to happen.</div>
+      <div class="formula-box fb2">
+        <div class="fb-label">Formula</div>
+        <div class="fb-formula">If + past simple, … would + infinitive</div>
+        <div class="fb-meaning">If I had a million dollars, I would travel the world.</div>
+      </div>
+      <div class="example-box e2">
+        <span class="ex2">If I were you,</span> <span class="exn">I <span class="ex2">would apologise</span> immediately.</span>
+      </div>
+      <div class="example-box e2">
+        <span class="exn">She <span class="ex2">would move</span> abroad</span> <span class="ex2">if she spoke another language</span>.
+      </div>
+      <div class="tip-box">Use <strong>were</strong> (not <em>was</em>) for all persons in formal writing: "If I were rich…" This is correct and very common at B1+.</div>
+    </div>
+
+    <!-- Slide 5: 3rd Conditional -->
+    <div class="slide" id="s5">
+      <div class="slide-label">3rd Conditional</div>
+      <div class="slide-title">Third Conditional — past regrets</div>
+      <div class="slide-sub">For imaginary situations in the past. It can't be changed now. Used for regrets, criticism, and speculation about the past.</div>
+      <div class="formula-box fb3">
+        <div class="fb-label">Formula</div>
+        <div class="fb-formula">If + past perfect, … would have + past participle</div>
+        <div class="fb-meaning">If I had studied, I would have passed.</div>
+      </div>
+      <div class="example-box e3">
+        <span class="ex3">If she had left earlier,</span> <span class="exn">she <span class="ex3">would have caught</span> the train.</span>
+      </div>
+      <div class="example-box e3">
+        <span class="exn">He <span class="ex3">wouldn't have got</span> lost</span> <span class="ex3">if he had brought a map</span>.
+      </div>
+      <div class="tip-box">Common mistake: don't use <em>would have</em> in the <em>if</em> clause. ✗ "If I would have known…" → ✓ "If I had known…"</div>
+    </div>
+
+    <!-- Slide 6: Mixed Conditional -->
+    <div class="slide" id="s6">
+      <div class="slide-label">Mixed Conditional</div>
+      <div class="slide-title">Mixed Conditional — past + present</div>
+      <div class="slide-sub">When a past condition affects a present result — or a present condition relates to a past result.</div>
+      <div class="formula-box fbm">
+        <div class="fb-label">Most common type (past → present)</div>
+        <div class="fb-formula">If + past perfect, … would + infinitive</div>
+        <div class="fb-meaning">If I had studied medicine, I would be a doctor now.</div>
+      </div>
+      <div class="example-box em">
+        <span class="exm">If she had taken that job,</span> <span class="exn">she <span class="exm">would be living</span> in London now.</span>
+      </div>
+      <div class="example-box em">
+        <span class="exn">He <span class="exm">would have finished</span> university</span> <span class="exm">if he were more disciplined</span>. <span style="color:#555; font-size:12px;">(present → past)</span>
+      </div>
+      <div class="tip-box">The key is the <strong>time mismatch</strong>: one clause refers to the past, the other to the present. The tense in each clause signals which time it refers to.</div>
+    </div>
+
+    <!-- Slide 7: Comparison -->
+    <div class="slide" id="s7">
+      <div class="slide-label">Comparison</div>
+      <div class="slide-title">All four at a glance</div>
+      <div class="slide-sub">Same topic, different conditionals — notice how the meaning shifts.</div>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>If clause</th>
+            <th>Result clause</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="t-type t-blue">1st</span><br><span class="t-gray">real / likely</span></td>
+            <td style="color:#7ab8f5;">If I have time</td>
+            <td style="color:#7ab8f5;">I will call you.</td>
+          </tr>
+          <tr>
+            <td><span class="t-type t-green">2nd</span><br><span class="t-gray">imaginary now</span></td>
+            <td style="color:#7ac97a;">If I had more time</td>
+            <td style="color:#7ac97a;">I would call you.</td>
+          </tr>
+          <tr>
+            <td><span class="t-type t-red">3rd</span><br><span class="t-gray">imaginary past</span></td>
+            <td style="color:#f57a7a;">If I had had more time</td>
+            <td style="color:#f57a7a;">I would have called you.</td>
+          </tr>
+          <tr>
+            <td><span class="t-type t-purple">Mixed</span><br><span class="t-gray">past → present</span></td>
+            <td style="color:#d07af5;">If I had studied more</td>
+            <td style="color:#d07af5;">I would have a better job now.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Slide 8: Story -->
+    <div class="slide" id="s8">
+      <div class="slide-label">In context</div>
+      <div class="slide-title">All four in one story</div>
+      <div class="slide-sub">Read and spot which conditional is which.</div>
+      <div class="story-box">
+        Laura is thinking about her life. <span class="ex3">If she had chosen a different career, she would have been happier.</span> Now she thinks: <span class="exm">if she had studied design, she would be doing something creative today.</span> She tells her friend: <span class="ex2">"If I had more courage, I would change jobs right now."</span> Her friend replies: <span class="ex1">"If you send your CV this week, you will get an interview for sure."</span>
+      </div>
+      <div class="legend-row">
+        <div class="legend-item"><span class="legend-dot" style="background:#7ab8f5;"></span><span style="color:#7ab8f5; font-size:12px;">1st</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#7ac97a;"></span><span style="color:#7ac97a; font-size:12px;">2nd</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f57a7a;"></span><span style="color:#f57a7a; font-size:12px;">3rd</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#d07af5;"></span><span style="color:#d07af5; font-size:12px;">Mixed</span></div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Quiz -->
+    <div class="slide" id="s9">
+      <div class="slide-label">Practice</div>
+      <div class="slide-title">Quick check</div>
+      <div class="slide-sub">Choose the correct option for each sentence.</div>
+      <div id="quiz-area"></div>
+    </div>
+
+    <!-- Slide 10: Summary -->
+    <div class="slide" id="s10">
+      <div class="slide-label">Summary</div>
+      <div class="slide-title">The key question to ask</div>
+      <div class="slide-sub">When you see a conditional, ask yourself: <em>when</em> is the situation, and <em>how real</em> is it?</div>
+      <div class="cond-grid">
+        <div class="cond-card c1">
+          <div class="cn">1st — Real future</div>
+          <div class="ct">If + present → will<br>"This could really happen."</div>
+        </div>
+        <div class="cond-card c2">
+          <div class="cn">2nd — Imaginary now</div>
+          <div class="ct">If + past → would<br>"This probably won't happen."</div>
+        </div>
+        <div class="cond-card c3">
+          <div class="cn">3rd — Imaginary past</div>
+          <div class="ct">If + past perfect → would have<br>"This didn't happen — too late!"</div>
+        </div>
+        <div class="cond-card cm">
+          <div class="cn">Mixed — Time shift</div>
+          <div class="ct">Past condition → present result<br>"That past affected my present."</div>
+        </div>
+      </div>
+      <div class="tip-box" style="margin-top:1rem;">Practice tip: think of a real regret, a current dream, and a future plan — then write one sentence for each conditional type!</div>
+    </div>
+
+  </div><!-- .deck -->
+
+  <div class="nav-row">
+    <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← Back</button>
+    <div class="dots-row" id="dots"></div>
+    <button class="nav-btn" id="nextBtn" onclick="go(1)">Next →</button>
+  </div>
+  <div class="slide-counter" id="counter">Slide 1 of 11</div>
+</div>
+
+<script>
+  var TOTAL = 11;
+  var cur = 0;
+  var qIdx = 0;
+  var answered = false;
+
+  var questions = [
+    {
+      sentence: 'If it ___ (rain) tomorrow, we ___ (cancel) the trip.',
+      options: ['rained / would cancel', 'rains / will cancel', 'had rained / would have cancelled'],
+      correct: 1,
+      feedback: 'Correct! First conditional — If + present simple, will + infinitive. This is a real, possible future situation.'
+    },
+    {
+      sentence: 'If I ___ (be) you, I ___ (not accept) that offer.',
+      options: ['am / will not accept', 'were / would not accept', 'had been / would not have accepted'],
+      correct: 1,
+      feedback: 'Correct! Second conditional — If + past simple (were), would + infinitive. "If I were you" is a classic imaginary present situation.'
+    },
+    {
+      sentence: 'She ___ (not miss) the flight if she ___ (leave) earlier.',
+      options: ['wouldn\'t have missed / had left', 'won\'t miss / leaves', 'wouldn\'t miss / had left'],
+      correct: 0,
+      feedback: 'Correct! Third conditional — would have + past participle / if + past perfect. The flight was missed — it\'s a past regret.'
+    },
+    {
+      sentence: 'If he ___ (study) harder at school, he ___ (be) an engineer now.',
+      options: ['studied / would be', 'had studied / would be', 'had studied / would have been'],
+      correct: 1,
+      feedback: 'Correct! Mixed conditional — if + past perfect (past condition) / would + infinitive (present result). He didn\'t study → he\'s not an engineer now.'
+    }
+  ];
+
+  function renderDots() {
+    var c = document.getElementById('dots');
+    c.innerHTML = '';
+    for (var i = 0; i < TOTAL; i++) {
+      var d = document.createElement('div');
+      d.className = 'dot-ind' + (i === cur ? ' active' : '');
+      d.setAttribute('data-idx', i);
+      d.onclick = function() { goTo(parseInt(this.getAttribute('data-idx'))); };
+      c.appendChild(d);
+    }
+    document.getElementById('counter').textContent = 'Slide ' + (cur + 1) + ' of ' + TOTAL;
+  }
+
+  function goTo(n) {
+    var slides = document.querySelectorAll('.slide');
+    slides[cur].classList.remove('active');
+    cur = n;
+    slides[cur].classList.add('active');
+    document.getElementById('prevBtn').disabled = (cur === 0);
+    document.getElementById('nextBtn').disabled = (cur === TOTAL - 1);
+    renderDots();
+    if (cur === 9) renderQuiz(0);
+  }
+
+  function go(dir) {
+    var next = cur + dir;
+    if (next >= 0 && next < TOTAL) goTo(next);
+  }
+
+  function renderQuiz(qi) {
+    qIdx = qi;
+    answered = false;
+    var q = questions[qi];
+    var area = document.getElementById('quiz-area');
+    var html = '<div class="quiz-counter">Question ' + (qi + 1) + ' of ' + questions.length + '</div>';
+    html += '<div class="quiz-sentence">"' + q.sentence + '"</div>';
+    html += '<div class="quiz-q">Choose the correct verb forms:</div>';
+    for (var i = 0; i < q.options.length; i++) {
+      html += '<button class="quiz-opt" data-idx="' + i + '" onclick="checkAns(' + i + ')">' + q.options[i] + '</button>';
+    }
+    html += '<div class="quiz-fb" id="qfb"></div>';
+    html += '<button class="next-q-btn" id="qnext" onclick="nextQ()">';
+    html += (qi === questions.length - 1) ? 'See summary ✓' : 'Next question →';
+    html += '</button>';
+    area.innerHTML = html;
+  }
+
+  function checkAns(i) {
+    if (answered) return;
+    answered = true;
+    var q = questions[qIdx];
+    var btns = document.querySelectorAll('.quiz-opt');
+    for (var b = 0; b < btns.length; b++) btns[b].disabled = true;
+    btns[i].classList.add(i === q.correct ? 'correct' : 'wrong');
+    if (i !== q.correct) btns[q.correct].classList.add('correct');
+    var fb = document.getElementById('qfb');
+    fb.className = 'quiz-fb show ' + (i === q.correct ? 'ok' : 'bad');
+    fb.textContent = i === q.correct
+      ? '✓ ' + q.feedback
+      : '✗ Not quite — the correct answer is highlighted. ' + q.feedback;
+    document.getElementById('qnext').className = 'next-q-btn show';
+  }
+
+  function nextQ() {
+    if (qIdx < questions.length - 1) {
+      renderQuiz(qIdx + 1);
+    } else {
+      goTo(10);
+    }
+  }
+
+  renderDots();
+</script>
+</body>
+</html>
